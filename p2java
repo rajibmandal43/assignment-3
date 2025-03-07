@@ -1,0 +1,91 @@
+import java.util.Scanner;
+class Matrix{
+    private int rows, cols;
+    private int[][] data;
+    public Matrix(int r, int c) {
+        rows = r;
+        cols = c;
+        data = new int[rows][cols];
+    }
+
+    public void inputMatrix(Scanner sc) {
+        System.out.println("Enter elements of " + rows + "x" + cols + " matrix:");
+        for(int i=0;i<=rows-1;i++){
+            for(int j=0;j<=cols-1;j++){
+               data[i][j]=sc.nextInt();
+            }
+         }
+    }
+
+    public void displayMatrix() {
+        for(int i=0;i<=rows-1;i++){
+            for(int j=0;j<=cols-1;j++){
+                System.out.print(data[i][j]+" ");
+            }
+            System.out.println();
+         }
+    }
+
+    public Matrix add(Matrix m){
+        if (rows != m.rows || cols != m.cols) {
+            System.out.println("Addition not possible");
+            return new Matrix(0, 0);
+        }
+        Matrix result = new Matrix(rows, cols);
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                result.data[i][j] = data[i][j] + m.data[i][j];
+        return result;
+    }
+
+    public Matrix multiply(Matrix m) {
+        if (cols != m.rows) {
+            System.out.println("Multiplication not possible");
+            return new Matrix(0, 0);
+        }
+        Matrix result = new Matrix(rows, m.cols);
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < m.cols; j++)
+                for (int k = 0; k < cols; k++)
+                    result.data[i][j] += data[i][k] * m.data[k][j];
+        return result;
+    }
+
+    public Matrix transpose() {
+        Matrix result = new Matrix(cols, rows);
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                result.data[j][i] = data[i][j];
+        return result;
+    }
+}
+
+public class practice{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.print("Enter rows and columns: ");
+        int r = sc.nextInt(), c = sc.nextInt();
+
+        Matrix mat1 = new Matrix(r, c);
+        mat1.inputMatrix(sc);
+
+        System.out.println("Transpose of the matrix:");
+        Matrix transposed = mat1.transpose();
+        transposed.displayMatrix();
+
+        System.out.println("Enter second matrix:");
+        Matrix mat2 = new Matrix(r, c);
+        mat2.inputMatrix(sc);
+
+        System.out.println("Addition of matrices:");
+        Matrix sum = mat1.add(mat2);
+        sum.displayMatrix();
+
+        System.out.println("Multiplication of matrices:");
+        Matrix product = mat1.multiply(mat2);
+        product.displayMatrix();
+        
+        sc.close();
+    }
+}
