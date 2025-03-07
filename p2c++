@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+using namespace std;
+class Matrix {
+private:
+    int rows, cols;
+    vector<vector<int>>data;  
+
+public:
+    Matrix(int r, int c) : rows(r), cols(c), data(r, vector<int>(c, 0)) {}
+
+    void inputMatrix() {
+        cout << "Enter elements of " << rows << "x" << cols << " matrix:\n";
+        for(int i=0;i<=rows-1;i++){
+            for(int j=0;j<=cols-1;j++){
+                cin>>data[i][j];
+            }
+         }
+    }
+
+    void displayMatrix(){
+         for(int i=0;i<=rows-1;i++){
+            for(int j=0;j<=cols-1;j++){
+                cout<<data[i][j]<<" ";
+            }
+            cout<<endl;
+         }
+    }
+
+    Matrix add(Matrix&m){
+        if (rows != m.rows || cols != m.cols) {
+            cout << "Addition not possible\n";
+            return Matrix(0, 0);
+        }
+        Matrix result(rows, cols);
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                result.data[i][j] = data[i][j] + m.data[i][j];
+        return result;
+    }
+
+    Matrix multiply(Matrix& m){
+        if (cols != m.rows) {
+            cout << "Multiplication not possible\n";
+            return Matrix(0, 0);
+        }
+        Matrix result(rows, m.cols);
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < m.cols; j++)
+                for (int k = 0; k < cols; k++)
+                    result.data[i][j] += data[i][k] * m.data[k][j];
+        return result;
+    }
+
+    Matrix transpose(){
+        Matrix result(cols, rows);
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                result.data[j][i] = data[i][j];
+        return result;
+    }
+};
+
+int main() {
+    int r, c;
+    cout << "Enter rows and columns: ";
+    cin >> r >> c;
+
+    Matrix mat1(r, c);
+    mat1.inputMatrix();
+
+    Matrix transposed = mat1.transpose();
+    cout << "Transpose of the matrix:\n";
+    transposed.displayMatrix();
+
+    cout << "Enter second matrix:\n";
+    Matrix mat2(r, c);
+    mat2.inputMatrix();
+
+    Matrix sum = mat1.add(mat2);
+    cout << "Addition of matrices:\n";
+    sum.displayMatrix();
+
+    Matrix product = mat1.multiply(mat2);
+    cout << "Multiplication of matrices:\n";
+    product.displayMatrix();
+
+    return 0;
+}
