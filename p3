@@ -1,0 +1,97 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Matrix {
+private:
+    int rows, cols;
+    vector<vector<int>>data;
+public:
+    Matrix(int r, int c) : rows(r), cols(c), data(r, vector<int>(c, 0)) {}
+
+    // Copy Constructor
+    Matrix(const Matrix& other) : rows(other.rows), cols(other.cols), data(other.data) {}
+
+    Matrix&operator=(Matrix& other) {
+        rows = other.rows;
+        cols = other.cols;
+        data = other.data;
+        return *this;
+    }
+
+    Matrix operator+(Matrix&other){
+        if (rows != other.rows || cols != other.cols) {
+            cout << "Matrix dimensions do not match for addition!\n";
+            return *this;
+        }
+        Matrix result(rows, cols);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                result.data[i][j] = data[i][j] + other.data[i][j];
+            }
+        }
+        return result;
+    }
+
+   
+    Matrix operator*(const Matrix& other) {
+        if (cols != other.rows) {
+            cout << "Matrix dimensions do not match for multiplication!\n";
+            return *this;
+        }
+        Matrix result(rows, other.cols);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < other.cols; j++) {
+                result.data[i][j] = 0;
+                for (int k = 0; k < cols; k++) {
+                    result.data[i][j] += data[i][k] * other.data[k][j];
+                }
+            }
+        }
+        return result;
+    }
+
+    void input() {
+        cout << "Enter matrix elements (" << rows << "x" << cols << "):\n";
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                cin >> data[i][j];
+            }
+        }
+    }
+
+    void display() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                cout << data[i][j] << " ";
+            }
+            cout << endl;
+        }
+    }
+};
+
+int main() {
+    int r, c;
+    cout << "Enter number of rows and columns for matrices: ";
+    cin >> r >> c;
+    Matrix A(r, c);
+    Matrix B(r, c);
+    cout << "Enter elements for Matrix A:\n";
+    A.input();
+    
+    cout << "Enter elements for Matrix B:\n";
+    B.input();
+    
+    Matrix C = A + B;
+    cout << "Matrix A + B:\n";
+    C.display();
+    
+    Matrix D = A * B;
+    cout << "Matrix A * B:\n";
+    D.display();
+    
+    Matrix E(1, 1);
+    E = A;
+    cout << "Matrix E (Copy of A):\n";
+    E.display();
+
+    return 0;
+}
